@@ -1,2 +1,3 @@
-# This project currently uses only Python standard library modules.
-# Add external dependencies here when they are introduced.
+numpy
+pandas
+scikit-learn

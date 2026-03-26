@@ -18,7 +18,8 @@ project1_s324671/
 ├── data/
 │   └── ratings.csv
 ├── modules/
-│   ├── nmf_model.py
+│   ├── models/
+│   │   └── nmf_model.py
 │   ├── train.py
 │   └── predict.py
 ├── models_trained/
@@ -83,7 +84,7 @@ What happens:
 
 ## Implemented NMF Details
 
-The NMF pipeline is implemented in `modules/nmf_model.py` using
+The NMF pipeline is implemented in `modules/models/nmf_model.py` using
 `sklearn.decomposition.NMF`.
 
 Main steps:

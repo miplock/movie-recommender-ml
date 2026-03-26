@@ -1,7 +1,7 @@
 # Prediction module responsible for generating and saving rating outputs.
 import pandas as pd
 
-from modules.nmf_model import NMFRecommender
+from modules.models.nmf_model import NMFRecommender
 
 
 def predict_ratings(

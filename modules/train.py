@@ -1,7 +1,7 @@
 # Training module responsible for model training workflow implementation.
 import pandas as pd
 
-from modules.nmf_model import NMFRecommender
+from modules.models.nmf_model import NMFRecommender
 
 
 def train_model(train_file: str, model_path: str, alg: str) -> None:
