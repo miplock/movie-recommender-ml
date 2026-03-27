@@ -53,6 +53,10 @@ class BaseRecommender:
 
         # Flaga informująca, czy model przeszedł trening.
         self.is_fitted = False
+        # Nazwa algorytmu raportowana w metadanych eksperymentu.
+        self.algorithm_name = self.__class__.__name__
+        # Słownik z hiperparametrami modelu ustawianymi w podklasie.
+        self.model_params = {}
 
     def fit(self, ratings_df: pd.DataFrame) -> "BaseRecommender":
         """Fit model on training ratings.
@@ -265,6 +269,27 @@ class BaseRecommender:
         with open(model_path, "rb") as f:
             # Deserializujemy obiekt modelu i zwracamy go do użycia.
             return pickle.load(f)
+
+    def get_model_metadata(self) -> dict[str, object]:
+        """Return unified model metadata for experiment logging.
+
+        EN:
+        Exposes algorithm name, concrete class name, and parameter dict.
+
+        Returns:
+            dict[str, object]: Serializable model metadata.
+
+        PL:
+        Zwraca zunifikowane metadane modelu do logowania eksperymentów.
+
+        Zwraca:
+            dict[str, object]: Serializowalne metadane modelu.
+        """
+        return {
+            "algorithm_name": self.algorithm_name,
+            "model_class": self.__class__.__name__,
+            "model_params": dict(self.model_params),
+        }
 
     def _build_mappings(self, ratings_df: pd.DataFrame) -> None:
         """Create ID-to-index and index-to-ID mappings.

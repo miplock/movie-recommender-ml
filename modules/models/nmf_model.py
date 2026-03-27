@@ -64,6 +64,14 @@ class NMFRecommender(BaseRecommender):
         self.random_state = random_state
         # Zapisujemy maksymalną liczbę iteracji optymalizacji.
         self.max_iter = max_iter
+        # Ujednolicone metadane algorytmu dla logów eksperymentów.
+        self.algorithm_name = "NMF"
+        self.model_params = {
+            "n_components": self.n_components,
+            "imputation_strategy": self.imputation_strategy,
+            "random_state": self.random_state,
+            "max_iter": self.max_iter,
+        }
 
         # Obiekt modelu sklearn, tworzony podczas fit().
         self.model: NMF | None = None
