@@ -2,13 +2,14 @@
 import pandas as pd
 
 from modules.models.nmf_model import NMFRecommender
+from modules.models.svd1_model import SVD1Recommender
 
 
 def train_model(train_file: str, model_path: str, alg: str) -> None:
-    """Train and save an NMF model from input ratings file.
+    """Train and save a recommender model from input ratings file.
 
     EN:
-    This function currently supports only the NMF algorithm.
+    This function supports NMF and SVD1 algorithms.
 
     Args:
         train_file (str): Path to CSV file with training ratings.
@@ -16,13 +17,13 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
         alg (str): Algorithm name requested by CLI.
 
     Raises:
-        NotImplementedError: If algorithm other than NMF is requested.
+        NotImplementedError: If unsupported algorithm is requested.
 
     Returns:
         None: Model is saved to disk as a side effect.
 
     PL:
-    Funkcja obecnie obsługuje wyłącznie algorytm NMF.
+    Funkcja obsługuje algorytmy NMF oraz SVD1.
 
     Argumenty:
         train_file (str): Ścieżka do pliku CSV z danymi treningowymi.
@@ -30,25 +31,30 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
         alg (str): Nazwa algorytmu wybrana w CLI.
 
     Wyjątki:
-        NotImplementedError: Gdy wybrano algorytm inny niż NMF.
+        NotImplementedError: Gdy wybrano nieobsługiwany algorytm.
 
     Zwraca:
         None: Model jest zapisywany na dysk jako efekt uboczny.
     """
-    # Na ten moment wspieramy tylko NMF.
-    if alg != "NMF":
+    # Wczytujemy dane treningowe z pliku CSV.
+    df = pd.read_csv(train_file)
+
+    # Tworzymy model zgodny z wybranym algorytmem.
+    if alg == "NMF":
+        model = NMFRecommender(
+            n_components=15,
+            imputation_strategy="movie_mean",
+        )
+    elif alg == "SVD1":
+        model = SVD1Recommender(
+            n_components=15,
+            imputation_strategy="movie_mean",
+        )
+    else:
         raise NotImplementedError(
             f"Algorithm {alg} is not implemented yet."
         )
 
-    # Wczytujemy dane treningowe z pliku CSV.
-    df = pd.read_csv(train_file)
-
-    # Tworzymy model NMF z domyślną konfiguracją projektu.
-    model = NMFRecommender(
-        n_components=15,
-        imputation_strategy="movie_mean",
-    )
     # Uczymy model na danych wejściowych.
     model.fit(df)
     # Zapisujemy wytrenowany model do wskazanej ścieżki.

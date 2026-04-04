@@ -1,17 +1,30 @@
 # Movie Recommender System (Project 1)
+### Mikołaj (s324671)
 
-This project implements a command-line movie recommender workflow based on
-the requirements from `2025_26_MCaDR_project1.pdf`.
+Implementacja projektu 1 z MCaDR oparta o interfejs CLI w `main.py`.
 
-Current implementation supports:
-- training a model (`--mode train`)
-- generating predictions from a saved model (`--mode predict`)
-- the `NMF` algorithm
+Aktualnie zaimplementowane:
+- trenowanie modelu (`--mode train`)
+- predykcja ocen (`--mode predict`)
+- algorytmy: `NMF`, `SVD1`
+- skrypty ewaluacji RMSE (bootstrap):
+  - `modules/evaluation/rmse_nmf.py`
+  - `modules/evaluation/rmse_svd1.py`
 
-Algorithms listed in the assignment but not implemented yet in this code:
-`SVD1`, `SVD2`, `SGD`, `BEST`.
+Algorytmy wymagane w specyfikacji, ale jeszcze niezaimplementowane:
+- `SVD2`
+- `SGD`
+- `BEST`
 
-## Project Structure
+## Wymagania
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Struktura projektu
 
 ```text
 project1_s324671/
@@ -19,7 +32,13 @@ project1_s324671/
 │   └── ratings.csv
 ├── modules/
 │   ├── models/
-│   │   └── nmf_model.py
+│   │   ├── base_model.py
+│   │   ├── nmf_model.py
+│   │   └── svd1_model.py
+│   ├── evaluation/
+│   │   ├── rmse_common.py
+│   │   ├── rmse_nmf.py
+│   │   └── rmse_svd1.py
 │   ├── train.py
 │   └── predict.py
 ├── models_trained/
@@ -29,30 +48,31 @@ project1_s324671/
 └── README.md
 ```
 
-## Data Format
+## Format danych
 
-Training input (`ratings.csv`) should contain at least:
+Plik treningowy (`ratings.csv`) musi zawierać kolumny:
 - `userId`
 - `movieId`
 - `rating`
 
-Prediction input should contain:
+Plik wejściowy do predykcji musi zawierać:
 - `userId`
 - `movieId`
 
-Prediction output (`preds.csv`) contains:
+Plik wyjściowy predykcji (`preds.csv`) zawiera:
 - `userId`
 - `movieId`
 - `rating`
 
-Predicted ratings are clipped to `[0.5, 5.0]` and rounded to the nearest
-`0.5`.
+Predykcje są przycinane do przedziału `[0.5, 5.0]` i zaokrąglane do najbliższego `0.5`.
 
-## How To Run
+## Uruchamianie
 
-Run commands from the project root directory.
+Polecenia uruchamiaj z katalogu głównego projektu.
 
-### 1. Train
+### 1. Trenowanie
+
+NMF:
 
 ```bash
 python main.py --mode train \
@@ -61,44 +81,60 @@ python main.py --mode train \
   --alg NMF
 ```
 
-What happens:
-- training CSV is loaded
-- NMF model is trained (`n_components=15`,
-  `imputation_strategy="movie_mean"`)
-- model is saved to `--model_path` (pickle)
+SVD1:
 
-### 2. Predict
+```bash
+python main.py --mode train \
+  --train_file data/ratings.csv \
+  --model_path models_trained/model_SVD1.pkl \
+  --alg SVD1
+```
+
+### 2. Predykcja
+
+NMF:
 
 ```bash
 python main.py --mode predict \
   --input_file sample_test.csv \
   --model_path models_trained/model_NMF.pkl \
-  --output_file results/preds.csv \
+  --output_file results/preds_nmf.csv \
   --alg NMF
 ```
 
-What happens:
-- saved model is loaded from `--model_path`
-- input pairs (`userId`, `movieId`) are read from `--input_file`
-- predictions are generated and written to `--output_file`
+SVD1:
 
-## Implemented NMF Details
+```bash
+python main.py --mode predict \
+  --input_file sample_test.csv \
+  --model_path models_trained/model_SVD1.pkl \
+  --output_file results/preds_svd1.csv \
+  --alg SVD1
+```
 
-The NMF pipeline is implemented in `modules/models/nmf_model.py` using
-`sklearn.decomposition.NMF`.
+### 3. Ewaluacja RMSE (bootstrap)
 
-Main steps:
-- build sparse user-movie matrix from input ratings
-- impute missing values (`zero`, `movie_mean`, or `user_mean`)
-- factorize matrix into latent factors `W` and `H`
-- predict by matrix reconstruction (`W @ H`)
-- handle cold-start cases with fallback:
-  movie mean -> user mean -> global mean
-- clip and round ratings to assignment-compatible scale
+NMF:
 
-## Notes
+```bash
+python -m modules.evaluation.rmse_nmf
+```
 
-- `main.py` accepts assignment-required algorithm names:
-  `NMF`, `SVD1`, `SVD2`, `SGD`, `BEST`.
-- `train.py` and `predict.py` currently execute only `NMF`.
-- For non-`NMF` selection, the code raises `NotImplementedError`.
+SVD1:
+
+```bash
+python -m modules.evaluation.rmse_svd1
+```
+
+Skrypty:
+- wykonują `N_RUNS=10` powtórzeń bootstrap,
+- trenują i predykują przez `main.py`,
+- zapisują metryki do:
+  - `results/nmf_rmse_runs.pkl`
+  - `results/svd1_rmse_runs.pkl`
+
+## Uwagi
+
+- `main.py` akceptuje: `NMF`, `SVD1`, `SVD2`, `SGD`, `BEST`.
+- W `train.py` i `predict.py` działają tylko `NMF` i `SVD1`.
+- Dla `SVD2`, `SGD`, `BEST` rzucany jest `NotImplementedError`.

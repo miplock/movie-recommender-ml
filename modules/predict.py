@@ -2,6 +2,7 @@
 import pandas as pd
 
 from modules.models.nmf_model import NMFRecommender
+from modules.models.svd1_model import SVD1Recommender
 
 
 def predict_ratings(
@@ -13,7 +14,7 @@ def predict_ratings(
     """Generate predictions and save them to output CSV file.
 
     EN:
-    This function currently supports only the NMF algorithm.
+    This function supports NMF and SVD1 algorithms.
 
     Args:
         input_file (str): Path to CSV file with prediction pairs.
@@ -22,13 +23,13 @@ def predict_ratings(
         alg (str): Algorithm name requested by CLI.
 
     Raises:
-        NotImplementedError: If algorithm other than NMF is requested.
+        NotImplementedError: If unsupported algorithm is requested.
 
     Returns:
         None: Predictions are saved to disk as a side effect.
 
     PL:
-    Funkcja obecnie obsługuje wyłącznie algorytm NMF.
+    Funkcja obsługuje algorytmy NMF oraz SVD1.
 
     Argumenty:
         input_file (str): Ścieżka do pliku CSV z parami do predykcji.
@@ -37,19 +38,21 @@ def predict_ratings(
         alg (str): Nazwa algorytmu wybrana w CLI.
 
     Wyjątki:
-        NotImplementedError: Gdy wybrano algorytm inny niż NMF.
+        NotImplementedError: Gdy wybrano nieobsługiwany algorytm.
 
     Zwraca:
         None: Predykcje są zapisywane na dysk jako efekt uboczny.
     """
-    # Na ten moment wspieramy wyłącznie predykcję z użyciem modelu NMF.
-    if alg != "NMF":
+    # Wczytujemy wcześniej wytrenowany model zgodny z algorytmem.
+    if alg == "NMF":
+        model = NMFRecommender.load(model_path)
+    elif alg == "SVD1":
+        model = SVD1Recommender.load(model_path)
+    else:
         raise NotImplementedError(
             f"Algorithm {alg} is not implemented yet."
         )
 
-    # Wczytujemy wcześniej wytrenowany model ze wskazanego pliku.
-    model = NMFRecommender.load(model_path)
     # Wczytujemy pary user-film, dla których mają być wyliczone oceny.
     input_df = pd.read_csv(input_file)
     # Generujemy DataFrame wynikowy z przewidzianą kolumną rating.
