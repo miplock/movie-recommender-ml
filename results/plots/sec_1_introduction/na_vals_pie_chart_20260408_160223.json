@@ -1,0 +1,15 @@
+{
+  "created_at_local": "20260408_160223",
+  "save_mode": "pkl_png",
+  "input_file": "data/ratings.csv",
+  "output_chart_file": "results/plots/sec_1_introduction/na_vals_pie_chart_20260408_160223.pkl",
+  "output_metadata_file": "results/plots/sec_1_introduction/na_vals_pie_chart_20260408_160223.json",
+  "output_png_file": "results/plots/sec_1_introduction/na_vals_pie_chart_20260408_160223.png",
+  "n_users": 610,
+  "n_movies": 9724,
+  "total_cells": 5931640,
+  "observed_cells": 100836,
+  "missing_cells": 5830804,
+  "observed_pct": 1.6999683055613624,
+  "missing_pct": 98.30003169443864
+}

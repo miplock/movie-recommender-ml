@@ -1,0 +1,13 @@
+{
+  "created_at_local": "20260404_201524",
+  "input_file": "data/ratings.csv",
+  "chart_file": "results/plots/sec_1_movie_reviewers_pct_20260404_201524.pkl",
+  "metadata_file": "results/plots/sec_1_movie_reviewers_pct_20260404_201524.json",
+  "metric": "percent_of_users_reviewing_each_movie",
+  "n_movies": 9724,
+  "n_unique_users": 610,
+  "min_pct": 0.16393442622950818,
+  "mean_pct": 1.6999683055613624,
+  "median_pct": 0.49180327868852464,
+  "max_pct": 53.93442622950819
+}

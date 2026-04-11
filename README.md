@@ -7,13 +7,13 @@ Aktualnie zaimplementowane:
 - trenowanie modelu (`--mode train`)
 - predykcja ocen (`--mode predict`)
 - algorytmy: `NMF`, `SVD1`
+- przygotowany model: `SGD` (`modules/models/sgd_model.py`)
 - skrypty ewaluacji RMSE (bootstrap):
   - `modules/evaluation/rmse_nmf.py`
   - `modules/evaluation/rmse_svd1.py`
 
-Algorytmy wymagane w specyfikacji, ale jeszcze niezaimplementowane:
+Algorytmy wymagane w specyfikacji, ale jeszcze niepodłączone do CLI:
 - `SVD2`
-- `SGD`
 - `BEST`
 
 ## Wymagania
@@ -34,6 +34,7 @@ project1_s324671/
 │   ├── models/
 │   │   ├── base_model.py
 │   │   ├── nmf_model.py
+│   │   ├── sgd_model.py
 │   │   └── svd1_model.py
 │   ├── evaluation/
 │   │   ├── rmse_common.py
@@ -137,4 +138,7 @@ Skrypty:
 
 - `main.py` akceptuje: `NMF`, `SVD1`, `SVD2`, `SGD`, `BEST`.
 - W `train.py` i `predict.py` działają tylko `NMF` i `SVD1`.
-- Dla `SVD2`, `SGD`, `BEST` rzucany jest `NotImplementedError`.
+- Plik `modules/models/sgd_model.py` istnieje, ale `SGD` nie jest jeszcze
+  podłączony w `train.py` i `predict.py`.
+- Dla `SVD2`, `SGD`, `BEST` w aktualnym CLI rzucany jest
+  `NotImplementedError`.

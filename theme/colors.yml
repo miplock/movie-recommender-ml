@@ -1,0 +1,11 @@
+primary: "#1f2a44"
+secondary: "#6b2f2f"
+accent: "#2f6b6b"
+
+background: "#f5f6fa"
+text: "#333333"
+
+chart:
+  - "#2f6b6b"
+  - "#6b2f2f"
+  - "#50e3c2"

@@ -1,0 +1,14 @@
+{
+  "created_at_local": "20260408_151930",
+  "input_file": "data/ratings.csv",
+  "output_chart_file": "results/plots/sec_1_introduction_20260408_151930.pkl",
+  "output_metadata_file": "results/plots/sec_1_introduction_20260408_151930.json",
+  "output_png_file": null,
+  "n_users": 610,
+  "n_movies": 9724,
+  "total_cells": 5931640,
+  "observed_cells": 100836,
+  "missing_cells": 5830804,
+  "observed_pct": 1.6999683055613624,
+  "missing_pct": 98.30003169443864
+}
