@@ -3,7 +3,8 @@ import pandas as pd
 
 from modules.models.nmf_model import NMFRecommender
 from modules.models.svd1_model import SVD1Recommender
-
+from modules.models.svd2_model import SVD2Recommender
+from modules.models.sgd_model import SGDRecommender
 
 def train_model(train_file: str, model_path: str, alg: str) -> None:
     """Train and save a recommender model from input ratings file.
@@ -50,6 +51,15 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
             n_components=15,
             imputation_strategy="movie_mean",
         )
+    elif alg == "SVD2":
+        model = SVD2Recommender(
+            n_components=5,
+            imputation_strategy="zero",
+            n_iters = 100,
+            tol = 1e-6
+        )
+    elif alg == "SGD":
+        model = SGDRecommender()
     else:
         raise NotImplementedError(
             f"Algorithm {alg} is not implemented yet."

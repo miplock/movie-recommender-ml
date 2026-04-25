@@ -3,6 +3,8 @@ import pandas as pd
 
 from modules.models.nmf_model import NMFRecommender
 from modules.models.svd1_model import SVD1Recommender
+from modules.models.svd2_model import SVD2Recommender
+from modules.models.sgd_model import SGDRecommender
 
 
 def predict_ratings(
@@ -48,6 +50,10 @@ def predict_ratings(
         model = NMFRecommender.load(model_path)
     elif alg == "SVD1":
         model = SVD1Recommender.load(model_path)
+    elif alg == "SVD2":
+        model = SVD2Recommender.load(model_path)
+    elif alg == "SGD":
+        model = SGDRecommender.load(model_path)
     else:
         raise NotImplementedError(
             f"Algorithm {alg} is not implemented yet."
