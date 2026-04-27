@@ -71,6 +71,7 @@ class SVD2Recommender(BaseRecommender):
             strategy=self.imputation_strategy,
             global_mean=None,
         )
+        #Z_centered = Z_filled - self.global_mean #
 
         # --- ITERACYJNE SVD ---
         for iteration in range(self.n_iters + 1):
@@ -81,10 +82,10 @@ class SVD2Recommender(BaseRecommender):
                 random_state=self.random_state,
             )
 
-            self.model.fit(Z_filled)
+            self.model.fit(Z_filled) #
 
             singular_values = self.model.singular_values_
-            transformed = self.model.transform(Z_filled)
+            transformed = self.model.transform(Z_filled) #
 
             safe_sigma = np.where(singular_values == 0.0, 1.0, singular_values)
             W = transformed / safe_sigma
@@ -93,22 +94,29 @@ class SVD2Recommender(BaseRecommender):
             H = np.dot(sigma_matrix, self.model.components_)
 
             Z_reconstructed = np.dot(W, H)
+            #Z_reconstructed += self.global_mean #
 
             # zachowujemy oryginalne wartości, aktualizujemy tylko braki
             Z_filled[~mask] = Z_reconstructed[~mask]
 
             # sprawdzamy zbieżność
-            diff = np.linalg.norm(Z_filled - Z_old) / np.linalg.norm(Z_old)
+            delta = (Z_filled - Z_old)[~mask]
+            base = Z_old[~mask]
+            diff = np.linalg.norm(delta) / (np.linalg.norm(base) + 1e-8)
             if iteration % 10 == 0:
-                print(f"[SVD2] Iter {iteration}, diff={diff:.6f}")
+                print(f"[SVD2] Iter {iteration}, diff={diff:.8f}")
 
-            if diff < self.tol:
+            if diff < self.tol and iteration >= 3:
                 print("[SVD2] Converged")
                 break
 
         # zapisujemy końcowe macierze
         self.W = W
         self.H = H
+        
+        #Z_clipped = np.clip(Z_filled, 0.0, 5.0)
+        #self.Z_pred = np.round(Z_clipped * 2) / 2
+        Z_filled = np.clip(Z_filled, 0, 5)
         self.Z_pred = Z_filled  # finalna macierz po iteracjach
 
         self.is_fitted = True

@@ -1,0 +1,33 @@
+---
+title: "Recommender System for movie ratings"
+subtitle: "Methods of classification and dimensionality reduction - Projet 1"
+author: "Tomasz Kąkol, Mikołaj Płóciniczak"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+\newpage
+
+# Introduction
+
+Recommender systems play a crucial role in modern online platforms by helping users discover relevant content based on their preferences. In this project, we focus on building a movie recommendation system that predicts user ratings for unseen user–movie pairs. The task is based on the MovieLens dataset, which contains historical ratings provided by users for various movies. The main challenge in this problem is the sparsity of the data, as most users have rated only a small subset of available movies. To address this issue, we apply several matrix factorization techniques, including NMF, SVD-based methods, and optimization-based approaches such as stochastic gradient descent. These methods aim to learn latent representations of users and movies, enabling accurate prediction of missing ratings. The performance of the implemented models is evaluated using the Root Mean Square Error (RMSE), allowing us to compare different approaches and identify the most effective solution.
+
+
+# Models
+
+## Non-negative Matrix Factorization algorithm
+
+## Singular Value Decomposition algorithm
+
+### SVD1 - Non-iterative version
+
+### SVD2 - Iterative version
+
+## Stochastic Gradient Descent algorithm
+
+# Comparision between models
+
+
