@@ -10,7 +10,7 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
     """Train and save a recommender model from input ratings file.
 
     EN:
-    This function supports NMF and SVD1 algorithms.
+    This function supports NMF, SVD1, SVD2, SGD and BEST algorithms.
 
     Args:
         train_file (str): Path to CSV file with training ratings.
@@ -24,7 +24,7 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
         None: Model is saved to disk as a side effect.
 
     PL:
-    Funkcja obsługuje algorytmy NMF oraz SVD1.
+    Funkcja obsługuje algorytmy NMF, SVD1, SVD2, SGD i BEST.
 
     Argumenty:
         train_file (str): Ścieżka do pliku CSV z danymi treningowymi.
@@ -43,23 +43,29 @@ def train_model(train_file: str, model_path: str, alg: str) -> None:
     # Tworzymy model zgodny z wybranym algorytmem.
     if alg == "NMF":
         model = NMFRecommender(
-            n_components=15,
-            imputation_strategy="movie_mean",
+            n_components=10,
+            imputation_strategy="user_mean",
         )
     elif alg == "SVD1":
         model = SVD1Recommender(
-            n_components=15,
-            imputation_strategy="movie_mean",
+            n_components=5,
+            imputation_strategy="user_mean",
         )
     elif alg == "SVD2":
         model = SVD2Recommender(
-            n_components=5,
-            imputation_strategy="zero",
+            n_components=3,
+            imputation_strategy="user_mean",
             n_iters = 100,
             tol = 1e-6
         )
     elif alg == "SGD":
-        model = SGDRecommender()
+        model = SGDRecommender(
+            rank = 3
+        )
+    elif alg == "BEST":
+        model = SGDRecommender(
+            rank = 5
+        )
     else:
         raise NotImplementedError(
             f"Algorithm {alg} is not implemented yet."

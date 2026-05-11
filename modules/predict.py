@@ -16,7 +16,7 @@ def predict_ratings(
     """Generate predictions and save them to output CSV file.
 
     EN:
-    This function supports NMF and SVD1 algorithms.
+    This function supports NMF, SVD1, SVD2, SGD and BEST algorithms.
 
     Args:
         input_file (str): Path to CSV file with prediction pairs.
@@ -31,7 +31,7 @@ def predict_ratings(
         None: Predictions are saved to disk as a side effect.
 
     PL:
-    Funkcja obsługuje algorytmy NMF oraz SVD1.
+    Funkcja obsługuje algorytmy NMF, SVD1, SVD2, SGD i BEST.
 
     Argumenty:
         input_file (str): Ścieżka do pliku CSV z parami do predykcji.
@@ -53,6 +53,8 @@ def predict_ratings(
     elif alg == "SVD2":
         model = SVD2Recommender.load(model_path)
     elif alg == "SGD":
+        model = SGDRecommender.load(model_path)
+    elif alg == "BEST":
         model = SGDRecommender.load(model_path)
     else:
         raise NotImplementedError(
